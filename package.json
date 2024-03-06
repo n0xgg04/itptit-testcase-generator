@@ -1,0 +1,29 @@
+{
+  "name": "itptit-test-generator",
+  "version": "1.0.5",
+  "description": "Test cases generator by n0xgg04",
+  "author": "n0xgg04",
+  "license": "ISC",
+  "scripts": {
+    "build": "tsc && tsc-alias",
+    "prepare": "npm run build",
+    "fix:path": "node -r tsconfig-paths/register ./dist/"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "dependencies": {
+    "@types/lodash": "^4.14.202",
+    "@types/winston": "^2.4.4",
+    "cli-progress": "^3.12.0",
+    "lodash": "^4.17.21",
+    "prettier": "^3.2.5",
+    "reflect-metadata": "^0.2.1",
+    "tsc-alias": "^1.8.8",
+    "typescript": "^5.3.3",
+    "winston": "^3.12.0"
+  },
+  "devDependencies": {
+    "tsc-watch": "^6.0.4"
+  },
+  "files": ["dist", "LICENSE", "README.md", "package.json"]
+}
