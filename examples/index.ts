@@ -1,6 +1,4 @@
-import { Int, Loop, NumberArray, UseSubGeneration } from "../decorators";
-import { TestCase } from "../classes/input-test-case";
-import createTestCase from "../test-case-generator";
+import {createTestCase, Int, Loop, NumberArray, TestCase, UseSubGeneration} from "itptit-test-generator";
 
 class SubTest extends TestCase {
     @Int(1, 10)
