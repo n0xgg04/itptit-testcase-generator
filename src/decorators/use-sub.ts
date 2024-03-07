@@ -2,6 +2,11 @@ import { TestCase } from "@classes/input-test-case";
 import Effect from "@enums/effect";
 import { generate } from "@/generators/input-generator";
 
+/**
+ * Generate a sub test-case template
+ * @param testCase - Test Case class template
+ * @constructor
+ */
 export function UseSubGeneration(testCase: new (...arg: any[]) => TestCase) {
     return function <T extends Object>(
         target: T,

@@ -2,6 +2,11 @@ import DataTypes from "../enums/datatypes";
 import Effect from "../enums/effect";
 import { LoopReflectDataType } from "@t/reflect-data";
 
+/**
+ * Repeat generate a test case template
+ * @param time - x times repeat
+ * @constructor
+ */
 export function Loop<T extends Object, P extends keyof T>(
     time: number | `${string}`
 ) {
