@@ -1,11 +1,12 @@
 import path from "path";
 import fs from "fs";
 import _ from "lodash";
-import { generate } from "./input-generator";
 import { exec, execSync } from "child_process";
 import { TestCase } from "@classes/input-test-case";
 import { SolutionNotFoundException } from "@exceptions/file-exception";
+import { generate } from "@/generators/input-generator";
 import logger from "@utils/logger";
+
 
 type Props = {
     template: new (...arg: any[]) => TestCase;
@@ -31,7 +32,7 @@ export default async function createTestCase({
 }: Props) {
     console.clear();
     logger.clear();
-    logger.info("Test case generator from @n0xgg04");
+    console.info("Test case generator from @n0xgg04");
     const basePath = baseDir || process.cwd();
     const solutionRealPath = path.join(basePath, solutionPath);
     const solutionFileName = path.basename(solutionPath);
@@ -44,7 +45,7 @@ export default async function createTestCase({
     if (!fs.existsSync(solutionRealPath))
         throw new SolutionNotFoundException(solutionRealPath);
     else {
-        logger.info("[Solution File] OK!");
+        console.info("[Solution File] OK!");
     }
 
     if (!fs.existsSync(cacheRealPath))
@@ -57,7 +58,7 @@ export default async function createTestCase({
         fs.mkdirSync(inputRealPath, {
             recursive: true
         });
-        logger.info("[Input] Created input folder !");
+        console.info("[Input] Created input folder !");
     }
 
     if (fs.existsSync(outputRealPath)) {
@@ -65,10 +66,10 @@ export default async function createTestCase({
         fs.mkdirSync(outputRealPath, {
             recursive: true
         });
-        logger.info("[Output] Created output folder !");
+        console.info("[Output] Created output folder !");
     }
 
-    logger.info("Compiling solution...");
+    console.info("Compiling solution...");
 
     exec(
         `g++ -o '${solutionExcFile}' '${solutionRealPath}'`,
@@ -77,8 +78,8 @@ export default async function createTestCase({
         },
         (error, stdout, stderr) => {
             if (!error) {
-                logger.info("Compiled solution file.");
-                logger.info("Generating...");
+                console.info("Compiled solution file.");
+                console.info("Generating...");
                 _.times(amount).map((i) => {
                     const inputPath = path.join(
                         inputRealPath,

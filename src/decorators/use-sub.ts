@@ -1,6 +1,6 @@
 import { TestCase } from "@classes/input-test-case";
 import Effect from "@enums/effect";
-import { generate } from "@/../input-generator";
+import { generate } from "@/generators/input-generator";
 
 export function UseSubGeneration(testCase: new (...arg: any[]) => TestCase) {
     return function <T extends Object>(

@@ -4,11 +4,14 @@ Author: [@n0xgg04](https://github.com/n0xgg04)
 Version: 1.0.4
 
 #### Installation:
-Install by npm
+- Install by npm
 ```bash
-npm i itptit-test-generator
+npm i itptit-test-generator ts-node typescript
 ```
-Config your ts:
+
+- Create typescript config ``tsconfig.json``
+
+- Config your ts:
 ```json
 {
   "compilerOptions": {
@@ -22,8 +25,8 @@ Config your ts:
     "declaration": true,                             
     "esModuleInterop": true,                            
     "forceConsistentCasingInFileNames": true,        
-    "skipLibCheck": true,
-  },
+    "skipLibCheck": true
+  }
 }
 
 ```
@@ -41,7 +44,7 @@ class SubTest extends TestCase {
     template = `$a $b`;
 }
 ```
-This template will generate input: ``10 20`` (2 randomize number)
+This template will generate input: ``2 5`` (2 randomize number from 1-10)
 
 #### Generate I/O files:
 ```ts
@@ -57,6 +60,11 @@ createTestCase({
 }).then(() => {
     console.log("DONE")
 });
+```
+
+- Run generator:
+```ts
+ts-node <path-to-file>
 ```
 
 

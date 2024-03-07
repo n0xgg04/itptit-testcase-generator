@@ -1,4 +1,4 @@
-import {createTestCase, Int, Loop, NumberArray, TestCase, UseSubGeneration} from "itptit-test-generator";
+import {createTestCase, Int, Loop, NumberArray, TestCase, UseSubGeneration} from "../"
 
 class SubTest extends TestCase {
     @Int(1, 10)
