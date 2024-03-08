@@ -1,4 +1,4 @@
-import DataTypes from "../enums/datatypes";
+import GENERATE_VALUE_TYPE from "../enums/datatypes";
 import Effect from "../enums/effect";
 import { LoopReflectDataType } from "@t/reflect-data";
 
@@ -46,7 +46,7 @@ export function Loop<T extends Object, P extends keyof T>(
         Reflect.defineMetadata(
             `datatype:${String(propertyKey)}`,
             <LoopReflectDataType>{
-                type: DataTypes.Loop
+                type: GENERATE_VALUE_TYPE.Loop
             },
             target
         );

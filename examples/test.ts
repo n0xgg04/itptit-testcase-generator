@@ -1,37 +1,27 @@
-import {createTestCase, Int, Loop, NumberArray, TestCase, UseSubGeneration} from "../"
+import { createTestCase, Int, TestCase, UseLogic, WordArray } from "../";
 
-class SubTest extends TestCase {
-    @Int(1, 10)
-    a: number;
-
-    @Int(1, 10)
-    b: number;
-
-    template = `$a $b`;
+function MyLogic(a: number, b: number) {
+    return a + b;
 }
 
 export class TestCaseInput extends TestCase {
-    @Int(1, 2)
+    @Int(1, 10)
     n: number;
 
     @Int(1, 10)
-    s: number;
+    m: number;
 
-    @NumberArray("$n", 1, 100)
-    array: number[];
+    @WordArray(2, 1, 100)
+    s: string[];
 
-    @NumberArray("$s", 1, 100)
-    array2: number[];
+    @UseLogic(MyLogic, ["$m", "$n"])
+    a: number;
 
-    @Loop("$n")
-    @UseSubGeneration(SubTest)
-    Test() {}
-
-    template = `$n $s\n$array\n$Test`;
+    template = `$n\n$a`;
 }
 
 createTestCase({
-    amount: 10,
+    amount: 1,
     inputDir: "input",
     outputDir: "output",
     template: TestCaseInput,

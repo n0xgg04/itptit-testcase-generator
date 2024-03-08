@@ -1,5 +1,5 @@
-import DataTypes from "../enums/datatypes";
-import { NumberArrayReflectDataType } from "@t/reflect-data";
+import GENERATE_VALUE_TYPE from "../enums/datatypes";
+import { ReflectMeta } from "@/metadata";
 
 /**
  * Make array of number with element which >= $min and <= max
@@ -13,14 +13,14 @@ export function NumberArray(
     min: number,
     max: number
 ) {
-    return function <T extends Object, P extends keyof T>(
+    return function <T extends Object, P extends keyof T & string>(
         target: T,
         propertyKey: P
     ) {
-        Reflect.defineMetadata(
-            `datatype:${String(propertyKey)}`,
-            <NumberArrayReflectDataType>{
-                type: DataTypes.NumberArray,
+        ReflectMeta.setDataTypeGenerate(
+            GENERATE_VALUE_TYPE.NumberArray,
+            propertyKey,
+            {
                 min,
                 max,
                 element

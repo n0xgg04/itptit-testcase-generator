@@ -1,15 +1,15 @@
-import DataTypes from "@enums/datatypes";
+import GENERATE_VALUE_TYPE from "@enums/datatypes";
 import { TestCase } from "@classes/input-test-case";
 import _ from "lodash";
 import getNumberOfVariable from "@utils/validator";
-import getOutputOf from "@utils/output-generator-by-datatype";
+import formatOutputValue from "@utils/output-generator-by-datatype";
 import Effect from "@enums/effect";
-import {
-    IntReflectDataType,
-    NumberArrayReflectDataType
-} from "@t/reflect-data";
+import { NumberDataType, NumberArrayReflectDataType } from "@t/reflect-data";
+import { MetadataKeyOf, ReflectMeta } from "@/metadata";
+import metadataKey from "@/constants/metadata-key";
+import generator from "@/generators/data-generators";
 
-type ReflectData = IntReflectDataType | NumberArrayReflectDataType;
+type ReflectData = NumberDataType | NumberArrayReflectDataType;
 
 /**
  * Generate function
@@ -20,59 +20,74 @@ export function generate(template: new (...args: []) => TestCase): string {
     const resultTemplate = testCaseInstance.template;
     const variables = Object.getOwnPropertyNames(testCaseInstance);
     variables.forEach((v) => {
-        const reflectData: ReflectData = Reflect.getMetadata(
-            `datatype:${v}`,
-            testCaseInstance
-        );
-        const propsDes = Object.getOwnPropertyDescriptor(testCaseInstance, v);
-        if (Reflect.hasMetadata(`datatype:${v}`, testCaseInstance)) {
+        if (ReflectMeta.existsDataType(testCaseInstance, v)) {
+            const reflectData = ReflectMeta.getDataTypeGenerate(
+                testCaseInstance,
+                v
+            );
+
+            //TODO: Add more here
             switch (reflectData.type) {
-                case DataTypes.Int:
-                    Object.defineProperty(testCaseInstance, v, {
-                        ...propsDes,
-                        value: _.random(reflectData.min, reflectData.max, false)
-                    });
+                case GENERATE_VALUE_TYPE.Number:
+                    generator.generateInt(testCaseInstance, v, reflectData);
                     break;
 
-                case DataTypes.NumberArray:
-                    let elements_total = reflectData.element;
-                    elements_total = getNumberOfVariable(
-                        elements_total,
-                        testCaseInstance
+                case GENERATE_VALUE_TYPE.NumberArray:
+                    generator.generateNumberArray(
+                        testCaseInstance,
+                        v,
+                        reflectData
                     );
-                    const data: Array<number> = _.times(elements_total).map(
-                        () => _.random(reflectData.min, reflectData.max, false)
-                    );
-                    Object.defineProperty(testCaseInstance, v, {
-                        ...propsDes,
-                        value: data
-                    });
-
                     break;
+
+                case GENERATE_VALUE_TYPE.Word:
+                    generator.generateWord(testCaseInstance, v, reflectData);
+                    break;
+
+                case GENERATE_VALUE_TYPE.WordArray:
+                    generator.generateWordArray(
+                        testCaseInstance,
+                        v,
+                        reflectData
+                    );
+                    break;
+
+                case GENERATE_VALUE_TYPE.FakeName:
+                    generator.generateFakeName(
+                        testCaseInstance,
+                        v,
+                        reflectData
+                    );
+                    break;
+
+                case GENERATE_VALUE_TYPE.UseLogic:
+                    generator.generateByLogicFunction(
+                        testCaseInstance,
+                        v,
+                        reflectData
+                    );
             }
         }
     });
 
     let result = resultTemplate;
-    //! Render
-    variables.forEach((v) => {
-        if (!Reflect.hasMetadata(`datatype:${v}`, testCaseInstance)) return;
+
+    //! Read value from props
+    variables.forEach((v: keyof typeof testCaseInstance) => {
+        if (!ReflectMeta.existsDataType(testCaseInstance, v)) return;
+
         result = result.replaceAll(
             "$" + v,
             _.trimStart(
-                getOutputOf(
-                    testCaseInstance[v as keyof typeof testCaseInstance],
-                    (
-                        Reflect.getMetadata(
-                            `datatype:${v}`,
-                            testCaseInstance
-                        ) as ReflectData
-                    ).type
+                formatOutputValue(
+                    testCaseInstance[v],
+                    ReflectMeta.getDataTypeGenerate(testCaseInstance, v).type
                 )
             )
         );
     });
 
+    //! Read effects
     const effectMethod = Reflect.hasMetadata("effect", testCaseInstance)
         ? (Reflect.getMetadata("effect", testCaseInstance) as Array<string>)
         : [];

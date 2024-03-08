@@ -1,18 +1,21 @@
-import DataTypes from "../enums/datatypes";
-
-function getOutputOf(
+import GENERATE_VALUE_TYPE from "../enums/datatypes";
+function formatOutputValue(
     data: number | Array<unknown> | string,
-    type: DataTypes
+    type: GENERATE_VALUE_TYPE
 ): string {
     switch (type) {
-        case DataTypes.Int:
+        case GENERATE_VALUE_TYPE.Number:
             return data.toString();
-        case DataTypes.NumberArray:
+        case GENERATE_VALUE_TYPE.NumberArray:
             return data.toString().replaceAll(",", " ");
 
-        case DataTypes.Loop:
+        case GENERATE_VALUE_TYPE.WordArray:
+            return data.toString().replaceAll(",", " ");
+
+        case GENERATE_VALUE_TYPE.Loop:
             return "";
     }
+    return data.toString();
 }
 
-export default getOutputOf;
+export default formatOutputValue;

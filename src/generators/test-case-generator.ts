@@ -6,6 +6,7 @@ import { TestCase } from "@classes/input-test-case";
 import { SolutionNotFoundException } from "@exceptions/file-exception";
 import { generate } from "@/generators/input-generator";
 import logger from "@utils/logger";
+import os from 'os'
 
 
 type Props = {
@@ -30,6 +31,13 @@ export default async function createTestCase({
     outputFilenameTemplate = "output$i.txt",
     timeout = 15000
 }: Props) {
+
+    if(os.platform() === "win32"){
+        inputDir = inputDir.replaceAll('/','\\')
+        outputDir = outputDir.replaceAll('/','\\')
+        solutionPath = solutionPath.replaceAll('/','\\')
+    }
+
     console.clear();
     logger.clear();
     console.info("Test case generator from @n0xgg04");
@@ -71,8 +79,15 @@ export default async function createTestCase({
 
     console.info("Compiling solution...");
 
+    let compileCmd: string;
+    if(os.platform() === "win32"){
+        console.log("[OS] Windows")
+        compileCmd = `g++ -o "${solutionExcFile}" "${solutionRealPath}"`.replaceAll('\\\\','\\')
+    }else{
+        compileCmd = `g++ -o '${solutionExcFile}' '${solutionRealPath}'`
+    }
     exec(
-        `g++ -o '${solutionExcFile}' '${solutionRealPath}'`,
+        compileCmd,
         {
             timeout
         },
@@ -91,8 +106,14 @@ export default async function createTestCase({
                     );
                     const input = generate(template);
                     fs.writeFileSync(inputPath, input);
+                    let cmd: string;
+                    if(os.platform() === "win32"){
+                        cmd = `"${solutionExcFile.replaceAll('/','\\')}.exe" < "${path.join(inputRealPath, inputFilenameTemplate?.replaceAll("$i", `${i + 1}`).replaceAll('/','\\'))}"`.replaceAll('\\\\','\\')
+                    }else{
+                        cmd = `'${solutionExcFile}' < '${path.join(inputRealPath, inputFilenameTemplate?.replaceAll("$i", `${i + 1}`))}'`
+                    }
                     exec(
-                        `'${solutionExcFile}' < '${path.join(inputRealPath, inputFilenameTemplate?.replaceAll("$i", `${i + 1}`))}'`,
+                        cmd,
                         {
                             timeout
                         },
@@ -101,7 +122,7 @@ export default async function createTestCase({
                                 fs.writeFileSync(outputPath, stdout);
                                 console.log(`Generated test case ${i + 1}`);
                             } else {
-                                console.log(error);
+                                console.log(`Failed to run ${cmd} :`,error);
                             }
                         }
                     );

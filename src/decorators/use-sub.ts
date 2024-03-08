@@ -13,6 +13,19 @@ export function UseSubGeneration(testCase: new (...arg: any[]) => TestCase) {
         propertyKey: string,
         descriptor: PropertyDescriptor
     ) {
+
+        const objEffect: Array<string> = Reflect.hasMetadata("effect", target)
+            ? Reflect.getMetadata("effect", target)
+            : [];
+
+        if (!objEffect.includes(propertyKey.toString())) {
+            Reflect.defineMetadata(
+                "effect",
+                [...objEffect, propertyKey.toString()],
+                target
+            );
+        }
+
         const metadataKey = `effect:${propertyKey.toString()}`;
         const effectList: Array<Effect> = Reflect.hasMetadata(
             metadataKey,

@@ -1,24 +1,32 @@
 import "reflect-metadata";
-import DataTypes from "../enums/datatypes";
-import { IntReflectDataType } from "@t/reflect-data";
+import GENERATE_VALUE_TYPE from "../enums/datatypes";
+import { NumberValueRequiredType } from "@t/reflect-data";
+import { ReflectMeta } from "@/metadata";
 
 /**
  * Create a number variable like int, long long
  * @param min - Minimum of value
  * @param max - Maximum of value
+ * @param is - Value must be odd/even/prime number
  * @constructor
  */
-export function Int(min: number, max: number) {
-    return function <T extends Object, P extends keyof T>(
+
+export function Int(
+    min: number,
+    max: number,
+    is: NumberValueRequiredType[] = []
+) {
+    return function <T extends Object, P extends keyof T & string>(
         target: T,
         propertyKey: P
     ) {
-        Reflect.defineMetadata(
-            `datatype:${String(propertyKey)}`,
-            <IntReflectDataType>{
-                type: DataTypes.Int,
+        ReflectMeta.setDataTypeGenerate(
+            GENERATE_VALUE_TYPE.Number,
+            propertyKey,
+            {
                 min,
-                max
+                max,
+                is
             },
             target
         );

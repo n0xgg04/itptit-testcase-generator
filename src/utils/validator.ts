@@ -1,5 +1,5 @@
-import { TestCase } from "../classes/input-test-case";
-import { TypeException } from "../exceptions/type_exception";
+import { TestCase } from "@classes/input-test-case";
+import { TypeException } from "@exceptions/type_exception";
 
 export default function getNumberOfVariable(
     elements_total: string | number,

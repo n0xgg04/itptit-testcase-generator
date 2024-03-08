@@ -73,10 +73,23 @@ ts-node <path-to-file>
 @Int(min, max)
 n: number; //Make a random number from min to max
 
+// Example:
+@Int(1, 100, ["prime"]) //"prime" : Only prime number, "odd"|"even"
+n: number;
+
 @Loop("$var") //Repeat generating $var time
+@useSubGeneration(SomeSubTemplate) // Using with loop for repeat generate a template
+name(){}
 
 @NumberArray("$var") //Array of number, with $var elements
+arr: number[];
 
-@UseSubGeneration(ClassTemplate) // Using with loop for repeat generate a template
+@Word(minLength, maxLength) //Random words
+str: string;
 
+@WordArray(element, minLength, maxLength) // Words array with $element elements
+str: string[];
+
+@UseLogic(() => string | number, ["$array","$of","$variable","$if","$u","$need"])
+mylogic: string;
 ```
