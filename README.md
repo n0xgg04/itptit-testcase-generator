@@ -3,6 +3,8 @@ Author: [@n0xgg04](https://github.com/n0xgg04)
 
 Version: 1.0.4
 
+How to install & use this module? [https://github.com/n0xgg04/example-itptit-test-generator](Vietnamese guide)
+
 #### Installation:
 - Install by npm
 ```bash
@@ -93,3 +95,4 @@ str: string[];
 @UseLogic(() => string | number, ["$array","$of","$variable","$if","$u","$need"])
 mylogic: string;
 ```
+
